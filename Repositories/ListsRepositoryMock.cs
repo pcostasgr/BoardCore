@@ -65,7 +65,7 @@ namespace BoardCore.Repositories
 
                 Lists _list=new Lists {
                     LISTID=1000,
-                    LISTTITLE=list.LISTTITLE + " MOCK INSERT",
+                    ListTitle=list.ListTitle + " MOCK INSERT",
                     USERID=list.USERID
                 };
                 
@@ -76,7 +76,7 @@ namespace BoardCore.Repositories
 
                 Lists _list=new Lists {
                     LISTID=-list.LISTID,
-                    LISTTITLE=list.LISTTITLE + " MOCK UPDATE",
+                    ListTitle=list.ListTitle + " MOCK UPDATE",
                     USERID=list.USERID
                 };
                

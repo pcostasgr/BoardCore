@@ -38,7 +38,7 @@ namespace BoardCore.Controllers
         [HttpPost]
         [Route("")]
         [AllowAnonymous]
-        public async Task<ActionResult<Cards>> AddList([FromBody] Cards model){
+        public async Task<ActionResult<Cards>> AddCard([FromBody] Cards model){
             
             var _card=new Cards 
                 {
@@ -67,7 +67,7 @@ namespace BoardCore.Controllers
         [HttpPut]
         [Route("")]
         [AllowAnonymous]
-        public async Task<ActionResult<Cards>> UpdateList([FromBody] Cards model){
+        public async Task<ActionResult<Cards>> UpdateCard([FromBody] Cards model){
             var _card=new Cards 
                 {
                  CARDID=model.CARDID,
@@ -93,7 +93,7 @@ namespace BoardCore.Controllers
         [HttpDelete]
         [Route("{cardid}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Int64>> DeleteList(Int64 cardid){
+        public async Task<ActionResult<Int64>> DeleteCard(Int64 cardid){
 
             var result= await _cards.DeleteCard(cardid);
 

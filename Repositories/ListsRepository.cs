@@ -40,11 +40,15 @@ namespace BoardCore.Repositories
         }
 
         public async Task<List<Lists>> GetByUserId(Int64 userId){
+            var userid_=userId;
+            if(userid_<=0){
+                userid_=1;
+            }
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "SELECT LISTID, LISTTITLE,USERID FROM LISTS WHERE USERID = @ID";
+                string sQuery = "SELECT LISTID, LISTTITLE ,USERID FROM LISTS WHERE USERID = @ID";
                 conn.Open();
-                var result = await conn.QueryAsync<Lists>(sQuery,new { ID=userId});
+                var result = await conn.QueryAsync<Lists>(sQuery,new { ID=userid_});
                 return result.ToList();
             }
         }
@@ -67,12 +71,13 @@ namespace BoardCore.Repositories
 
                 Lists _list=new Lists {
                     LISTID=-1,
-                    LISTTITLE=list.LISTTITLE,
-                    USERID=list.USERID
+                    ListTitle=list.ListTitle,
+                    USERID=list.USERID,
+                    CARDDATA=new List<Cards>()
                 };
                 
                 var _params=new DynamicParameters();
-                _params.Add("@listtitle",_list.LISTTITLE);
+                _params.Add("@listtitle",_list.ListTitle);
                 _params.Add("@userid",_list.USERID);
                 _params.Add(name:"@v_listid",value:_list.LISTID,dbType:DbType.Int64,
                  direction:ParameterDirection.InputOutput);
@@ -102,13 +107,14 @@ namespace BoardCore.Repositories
 
                 Lists _list=new Lists {
                     LISTID=list.LISTID,
-                    LISTTITLE=list.LISTTITLE,
-                    USERID=list.USERID
+                    ListTitle=list.ListTitle,
+                    USERID=list.USERID,
+                    CARDDATA=new List<Cards>()
                 };
                 
                 var _params=new DynamicParameters();
                 _params.Add("@v_listid",_list.LISTID);
-                _params.Add("@v_listtitle",_list.LISTTITLE);
+                _params.Add("@v_listtitle",_list.ListTitle);
 
                 string sQuery=@"update LISTS set ";
                 sQuery+=" LISTTITLE=@v_listtitle ";

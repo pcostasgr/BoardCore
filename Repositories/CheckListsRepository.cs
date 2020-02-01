@@ -34,14 +34,34 @@ namespace BoardCore.Repositories
             {
                 var listDictionary=new Dictionary<Int64,CheckLists>();
 
+               /* var result=await conn.QueryMultipleAsync(
+                    @"SELECT CHECKLISTID,TITLE,CARDID,USERID FROM CHECKLISTS  where CHECKLISTID=@ID;
+                    SELECT CLITEMID,ITEMTITLE,ISCHECKED,CHECKLISTID,USERID from CHECKLISTITEMS 
+                     where CHECKLISTID=@ID; 
+                    ",new {@ID = checklistId}
+                );
+
+                var list=result.ReadSingle<CheckLists>();
+                list.ITEMS=new List<CheckListItems>();
+
+                var items=result.Read<CheckListItems>();
+                
+                if(items!=null && items.Count()>0 ){
+                    list.ITEMS.AddRange(items); 
+                }
+
+                return list;
+*/
+                //list.ITEMS.AddRange(items);
+
                 string sQuery = "SELECT C.CHECKLISTID,C.TITLE,C.CARDID,C.USERID ";
                 sQuery+=" ,I.CLITEMID,I.ITEMTITLE,I.ISCHECKED,I.CHECKLISTID,I.USERID ";
-                sQuery+=" FROM CHECKLISTS C LEFT OUTER JOIN CHECKLISTITEMS I ON C.CHECKLISTID=I.CHECKLISTID";
-                sQuery+=" WHERE C.CHECKLISTID = @ID";
+                sQuery+=" FROM CHECKLISTS AS C LEFT OUTER JOIN CHECKLISTITEMS AS I ON C.CHECKLISTID=I.CHECKLISTID";
+                sQuery+=" WHERE C.CHECKLISTID = @ID;";
                 conn.Open();
                 var result = await conn.QueryAsync<CheckLists,CheckListItems,CheckLists>(
                     sQuery,
-                    map:(list,listItem) => {
+                    map:(list,items) => {
                         CheckLists _list;
 
                         if(!listDictionary.TryGetValue(list.CHECKLISTID,out _list)){
@@ -50,12 +70,16 @@ namespace BoardCore.Repositories
                             listDictionary.Add(_list.CHECKLISTID,_list);
                         }
                         
-                        _list.ITEMS.Add(listItem);
+                        _list.ITEMS.Add(items);
                         return _list;
                     },
                     splitOn:"CHECKLISTID",
-                    param:new { ID = checklistId });
-                return result.FirstOrDefault();
+                    param:new { @ID = checklistId });
+                    
+                    return result.FirstOrDefault();
+
+                
+               
             }
         }
 

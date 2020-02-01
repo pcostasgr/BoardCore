@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace BoardCore.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ListsController : ControllerBase
+   public class ListsController : ControllerBase
     {
         private readonly IListsRepository _lists;
 
@@ -27,7 +28,6 @@ namespace BoardCore.Controllers
         }
 
 
-        [HttpGet]
         [Route("userid/{id}")]
         public async Task<ActionResult<List<Lists>>> GetByUserId(Int64 id)
         {
@@ -49,7 +49,7 @@ namespace BoardCore.Controllers
             var _list=new Lists 
                 {
                  LISTID=-1,
-                 LISTTITLE=model.LISTTITLE,
+                 ListTitle=model.ListTitle,
                  USERID=model.USERID
                 };
             
@@ -73,7 +73,7 @@ namespace BoardCore.Controllers
              var _list=new Lists 
                 {
                  LISTID=model.LISTID,
-                 LISTTITLE=model.LISTTITLE,
+                 ListTitle=model.ListTitle,
                  USERID=model.USERID
                 };
             
