@@ -64,7 +64,7 @@ namespace BoardCore.Controllers
         [HttpPut]
         [Route("")]
         [AllowAnonymous]
-        public async Task<ActionResult<CheckLists>> UpdateList([FromBody] CheckLists model){
+        public async Task<ActionResult<CheckLists>> UpdateCheckList([FromBody] CheckLists model){
              var _list=new CheckLists 
                 {
                  CHECKLISTID=model.CHECKLISTID,
