@@ -13,6 +13,6 @@ namespace BoardCore.Models
         public string ListTitle { get; set; }
         public Int64 USERID { get; set; }
 
-        public List<Cards> CARDDATA { get; set;}
+        public List<Cards> cardData { get; set;}
     }
 }

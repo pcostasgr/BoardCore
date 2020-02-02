@@ -49,7 +49,16 @@ namespace BoardCore.Repositories
                 string sQuery = "SELECT LISTID, LISTTITLE ,USERID FROM LISTS WHERE USERID = @ID";
                 conn.Open();
                 var result = await conn.QueryAsync<Lists>(sQuery,new { ID=userid_});
-                return result.ToList();
+
+                var lists=result.ToList();
+                CardsRepository cardsRepo=new CardsRepository(_config);
+
+                foreach(Lists list_ in lists){
+                    var cardData=await cardsRepo.GetByListId(list_.LISTID);    
+                    list_.cardData=cardData;
+                }
+
+                return lists;
             }
         }
 
@@ -73,7 +82,7 @@ namespace BoardCore.Repositories
                     LISTID=-1,
                     ListTitle=list.ListTitle,
                     USERID=list.USERID,
-                    CARDDATA=new List<Cards>()
+                    cardData=new List<Cards>()
                 };
                 
                 var _params=new DynamicParameters();
@@ -109,7 +118,7 @@ namespace BoardCore.Repositories
                     LISTID=list.LISTID,
                     ListTitle=list.ListTitle,
                     USERID=list.USERID,
-                    CARDDATA=new List<Cards>()
+                    cardData=new List<Cards>()
                 };
                 
                 var _params=new DynamicParameters();

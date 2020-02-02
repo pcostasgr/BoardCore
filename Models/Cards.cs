@@ -13,7 +13,7 @@ namespace BoardCore.Models
         public string CARDTITLE { get; set; }
         public string CARDDESCR { get; set; }
         public Int64 LISTID { get; set; }
-        public DateTime CARDDATE { get; set; }
+        public DateTime? CARDDATE { get; set; }
         public Int64 USERID {get; set;}
 
          public override string ToString()

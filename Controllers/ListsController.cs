@@ -29,6 +29,7 @@ namespace BoardCore.Controllers
 
 
         [Route("userid/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Lists>>> GetByUserId(Int64 id)
         {
             return await _lists.GetByUserId(id);

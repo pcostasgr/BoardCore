@@ -32,7 +32,7 @@ namespace BoardCore.Repositories
         {
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "SELECT CARDID,CARDTITLE,CARDDESCR,LISTID,USERID FROM CARDS WHERE CARDID = @ID";
+                string sQuery = "SELECT CARDID,CARDTITLE,CARDDESCR,LISTID,USERID,CARDDATE FROM CARDS WHERE CARDID = @ID";
                 conn.Open();
                 var result = await conn.QueryAsync<Cards>(sQuery, new { ID = cardId });
                 return result.FirstOrDefault();
@@ -42,7 +42,7 @@ namespace BoardCore.Repositories
         public async Task<List<Cards>> GetByListId(Int64 listId){
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "SELECT CARDID,CARDTITLE,CARDDESCR,LISTID,USERID FROM CARDS WHERE LISTID = @ID";
+                string sQuery = "SELECT CARDID,CARDTITLE,CARDDESCR,LISTID,USERID,CARDDATE FROM CARDS WHERE LISTID = @ID";
                 conn.Open();
                 var result = await conn.QueryAsync<Cards>(sQuery,new { ID=listId});
                 return result.ToList();
