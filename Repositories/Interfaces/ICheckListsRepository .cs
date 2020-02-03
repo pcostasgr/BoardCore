@@ -8,7 +8,6 @@ namespace BoardCore.Repositories.Interfaces
 {
     public interface ICheckListsRepository
     {
-        Task<CheckLists> GetByID(Int64 checklistId);
         Task<List<CheckLists>> GetByCardId(Int64 cardId);
         Task<CheckLists> AddCheckList(CheckLists list);
         Task<CheckLists> UpdateCheckList(CheckLists list);

@@ -74,6 +74,7 @@ namespace BoardCore
             services.AddTransient<IListsRepository, ListsRepository>();
             services.AddTransient<ICardsRepository, CardsRepository>();
             services.AddTransient<ICheckListsRepository, CheckListsRepository>();
+            services.AddTransient<ICheckListItemsRepository, CheckListItemsRepository>();
 
             services.AddApiVersioning(o => {
             o.ReportApiVersions = true;

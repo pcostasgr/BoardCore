@@ -14,7 +14,7 @@ namespace BoardCore.Models
         public Int64 USERID { get; set; }
         public Int64 CHECKLISTID { get; set; }
 
-        public Int16 ISCHECKED { get; set ;}
+        public bool ISCHECKED { get; set ;}
 
 
     }

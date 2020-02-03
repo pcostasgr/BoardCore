@@ -28,36 +28,16 @@ namespace BoardCore.Repositories
             }
         }
 
-        public async Task<CheckLists> GetByID(Int64 checklistId)
+        public async Task<List<CheckLists>> GetByCardId(Int64 cardid)
         {
             using (IDbConnection conn = Connection)
             {
                 var listDictionary=new Dictionary<Int64,CheckLists>();
 
-               /* var result=await conn.QueryMultipleAsync(
-                    @"SELECT CHECKLISTID,TITLE,CARDID,USERID FROM CHECKLISTS  where CHECKLISTID=@ID;
-                    SELECT CLITEMID,ITEMTITLE,ISCHECKED,CHECKLISTID,USERID from CHECKLISTITEMS 
-                     where CHECKLISTID=@ID; 
-                    ",new {@ID = checklistId}
-                );
-
-                var list=result.ReadSingle<CheckLists>();
-                list.ITEMS=new List<CheckListItems>();
-
-                var items=result.Read<CheckListItems>();
-                
-                if(items!=null && items.Count()>0 ){
-                    list.ITEMS.AddRange(items); 
-                }
-
-                return list;
-*/
-                //list.ITEMS.AddRange(items);
-
-                string sQuery = "SELECT C.CHECKLISTID,C.TITLE,C.CARDID,C.USERID ";
-                sQuery+=" ,I.CLITEMID,I.ITEMTITLE,I.ISCHECKED,I.CHECKLISTID,I.USERID ";
+                string sQuery = "SELECT C.TITLE,C.USERID,C.CARDID,C.CHECKLISTID";
+                sQuery+=" ,I.CLITEMID,I.ITEMTITLE,I.USERID,I.ISCHECKED,I.CHECKLISTID ";
                 sQuery+=" FROM CHECKLISTS AS C LEFT OUTER JOIN CHECKLISTITEMS AS I ON C.CHECKLISTID=I.CHECKLISTID";
-                sQuery+=" WHERE C.CHECKLISTID = @ID;";
+                sQuery+=" WHERE C.CARDID = @ID;";
                 conn.Open();
                 var result = await conn.QueryAsync<CheckLists,CheckListItems,CheckLists>(
                     sQuery,
@@ -69,27 +49,17 @@ namespace BoardCore.Repositories
                             _list.ITEMS=new List<CheckListItems>();
                             listDictionary.Add(_list.CHECKLISTID,_list);
                         }
-                        
+
                         _list.ITEMS.Add(items);
                         return _list;
                     },
-                    splitOn:"CHECKLISTID",
-                    param:new { @ID = checklistId });
+                    splitOn:"CLITEMID",
+                    param:new { @ID =cardid });
                     
-                    return result.FirstOrDefault();
-
-                
+                    return result
+                    .Distinct()
+                    .ToList();
                
-            }
-        }
-
-        public async Task<List<CheckLists>> GetByCardId(Int64 cardId){
-            using (IDbConnection conn = Connection)
-            {
-                string sQuery = "SELECT CHECKLISTID,TITLE,CARDID,USERID FROM CHECKLISTS WHERE CARDID = @ID";
-                conn.Open();
-                var result = await conn.QueryAsync<CheckLists>(sQuery,new { ID=cardId});
-                return result.ToList();
             }
         }
 

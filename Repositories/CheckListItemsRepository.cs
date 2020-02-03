@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace BoardCore.Repositories
 {
-    public class CheckListItemssRepository : ICheckListItemsRepository
+    public class CheckListItemsRepository : ICheckListItemsRepository
     {
         private readonly IConfiguration _config;
 
-        public CheckListItemssRepository(IConfiguration config)
+        public CheckListItemsRepository(IConfiguration config)
         {
             _config = config;
         }
@@ -29,6 +29,16 @@ namespace BoardCore.Repositories
         }
 
 
+
+        public async Task<List<CheckListItems>> GetByCheckListId(Int64 checklistid){
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "select CLITEMID,ITEMTITLE,ISCHECKED,CHECKLISTID,USERID from CHECKLISTITEMS = @ID";
+                conn.Open();
+                var result = await conn.QueryAsync<CheckListItems>(sQuery,new { ID=checklistid});
+                return result.ToList();
+            }
+        }
 
         public async Task<CheckListItems> AddItem(CheckListItems item){
 
@@ -90,7 +100,7 @@ namespace BoardCore.Repositories
                 _params.Add("@clitemid",_item.CLITEMID);
 
                 string sQuery=@"update CHECKLISTITEMS set ";
-                sQuery+=" ITEMTITME=@itemtitle,";
+                sQuery+=" ITEMTITLE=@itemtitle,";
                 sQuery+=" ISCHECKED=@ischecked, ";
                 sQuery+=" USERID=@USERID, ";
                 sQuery+=" CHECKLISTID=@CHECKLISTID ";
