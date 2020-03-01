@@ -34,14 +34,17 @@ namespace BoardCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
 
-           /* services.AddCors(c =>  {  
-                    c.AddPolicy("AllowOrigin", 
-                    options => 
-                    options.WithOrigins("http://localhost:3000")
-                    ); 
-            });*/
+            services.AddCors(options => options.AddPolicy("MyPolicy", build =>
+                {                
+                        build
+                        .SetIsOriginAllowed((host)=>true)
+                        .WithOrigins("http://localhost:3000/")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                        
+                }
+            ));
 
 
             services.AddControllers();
@@ -69,6 +72,8 @@ namespace BoardCore
                 };
             });
 
+          
+
             services.AddScoped<IUserService,UserService>();
             services.AddTransient<IUsersRepository,UsersRepository>();
             services.AddTransient<IListsRepository, ListsRepository>();
@@ -92,17 +97,18 @@ namespace BoardCore
                 app.UseDeveloperExceptionPage();
             }
 
-           // app.UseHttpsRedirection();
 
-            app.UseRouting();
-
-
-            app.UseCors(x => x
+            /*app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-            );
+            );*/
 
+           app.UseCors("MyPolicy");
+
+            app.UseHttpsRedirection();
+            
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
